@@ -1,8 +1,87 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
+interface ItemProps {
+  name: string
+  link: string
+}
+
+interface ItemsProps {
+  type: string
+  men: ItemProps[]
+  women: ItemProps[]
+}
+
+const items: ItemsProps[] = [
+  {
+    type: 'Clothes',
+    men: [
+      { name: 'All', link: 'https://example.com/men-item-1' },
+      { name: 'Hoodies', link: 'https://example.com/men-item-2' },
+      { name: 'Jeans', link: 'https://example.com/men-item-3' },
+    ],
+    women: [
+      { name: 'All', link: 'https://example.com/women-item-1' },
+      { name: 'Hoodies', link: 'https://example.com/women-item-2' },
+      { name: 'Jeans', link: 'https://example.com/women-item-3' },
+    ],
+  },
+  {
+    type: 'Shoes',
+    men: [
+      { name: 'All', link: 'https://example.com/men-item-a' },
+      { name: 'Sneakers', link: 'https://example.com/men-item-b' },
+      { name: 'Boots', link: 'https://example.com/men-item-c' },
+    ],
+    women: [
+      { name: 'All', link: 'https://example.com/women-item-x' },
+      { name: 'Sneakers', link: 'https://example.com/women-item-y' },
+      { name: 'Boots', link: 'https://example.com/women-item-z' },
+    ],
+  },
+  {
+    type: 'Accessoires',
+    men: [
+      { name: 'All', link: 'https://example.com/men-item-a' },
+      { name: 'Bags', link: 'https://example.com/men-item-b' },
+      { name: 'Watches', link: 'https://example.com/men-item-c' },
+    ],
+    women: [
+      { name: 'All', link: 'https://example.com/women-item-x' },
+      { name: 'Bags', link: 'https://example.com/women-item-y' },
+      { name: 'Watches', link: 'https://example.com/women-item-z' },
+    ],
+  },
+  {
+    type: 'Sport',
+    men: [
+      { name: 'All', link: 'https://example.com/men-item-a' },
+      { name: 'Running', link: 'https://example.com/men-item-b' },
+      { name: 'Outdoor', link: 'https://example.com/men-item-c' },
+    ],
+    women: [
+      { name: 'All', link: 'https://example.com/women-item-x' },
+      { name: 'Running', link: 'https://example.com/women-item-y' },
+      { name: 'Outdoor', link: 'https://example.com/women-item-z' },
+    ],
+  },
+  {
+    type: 'Designer',
+    men: [
+      { name: 'All', link: 'https://example.com/men-item-a' },
+      { name: 'Bags', link: 'https://example.com/men-item-b' },
+      { name: 'Clothing', link: 'https://example.com/men-item-c' },
+    ],
+    women: [
+      { name: 'All', link: 'https://example.com/women-item-x' },
+      { name: 'Bags', link: 'https://example.com/women-item-y' },
+      { name: 'Clothing', link: 'https://example.com/women-item-z' },
+    ],
+  },
+]
+
 const Header = () => {
-  const [open, setOpen] = useState(0)
+  const [openId, setOpenId] = useState<number | null>(null)
 
   return (
     <header>
@@ -13,41 +92,23 @@ const Header = () => {
             <path stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5' />
           </svg>
         </button>
-        <div onMouseLeave={() => setOpen(0)} className='hidden lg:flex lg:gap-10 lg:justify-between p-2 m-2 relative'>
-          <div>
-            <Link onMouseOver={() => setOpen(1)} className='hover:underline underline-offset-4' to='#'>
-              Clothes
-            </Link>
-            {open === 1 && <Dropdown open={open} men={['Shoes', 'Hoodies']} women={['Shoes', 'Hoodies']} />}
-          </div>
-
-          <div>
-            <Link onMouseOver={() => setOpen(2)} className='hover:underline underline-offset-4' to='#'>
-              Shoes
-            </Link>
-            {open === 2 && <Dropdown open={open} men={['Sneakers', 'Boots']} women={['Sneakers', 'Boots']} />}
-          </div>
-
-          <div>
-            <Link onMouseOver={() => setOpen(3)} className='hover:underline underline-offset-4' to='#'>
-              Accessoires
-            </Link>
-            {open === 3 && <Dropdown open={open} men={['Watches', 'Glasses']} women={['Watches', 'Glasses']} />}
-          </div>
-
-          <div>
-            <Link onMouseOver={() => setOpen(4)} className='hover:underline underline-offset-4' to='#'>
-              Sport
-            </Link>
-            {open === 4 && <Dropdown open={open} men={['Running', 'Outdoor']} women={['Running', 'Outdoor']} />}
-          </div>
-
-          <div>
-            <Link onMouseOver={() => setOpen(5)} className='hover:underline underline-offset-4' to='#'>
-              Designer
-            </Link>
-            {open === 5 && <Dropdown open={open} men={['Shoes', 'Bags']} women={['Shoes', 'Bags']} />}
-          </div>
+        <div onMouseLeave={() => setOpenId(null)} className='hidden lg:flex lg:gap-10 lg:justify-between p-2 m-2 relative'>
+          <Link onMouseOver={() => setOpenId(0)} className='hover:underline underline-offset-4' to='#'>
+            Clothes
+          </Link>
+          <Link onMouseOver={() => setOpenId(1)} className='hover:underline underline-offset-4' to='#'>
+            Shoes
+          </Link>
+          <Link onMouseOver={() => setOpenId(2)} className='hover:underline underline-offset-4' to='#'>
+            Accessoires
+          </Link>
+          <Link onMouseOver={() => setOpenId(3)} className='hover:underline underline-offset-4' to='#'>
+            Sport
+          </Link>
+          <Link onMouseOver={() => setOpenId(4)} className='hover:underline underline-offset-4' to='#'>
+            Designer
+          </Link>
+          <Dropdown open={openId !== null ? true : false} items={openId !== null ? items[openId] : null} />
         </div>
 
         <div className='flex gap-4 items-center'>
@@ -69,27 +130,28 @@ const Header = () => {
 }
 
 interface DropdownProps {
-  open: number
-  men?: string[]
-  women?: string[]
+  open: boolean
+  items: ItemsProps | null
 }
 
-const Dropdown = ({ open, men, women }: DropdownProps) => {
+const Dropdown = ({ open, items }: DropdownProps) => {
   return (
-    <div className={`w-full left-0 h-72 absolute bg-white border-b-2 border-black border
-    border-t-gray-400 top-10  ${open !== 0 ? 'block' : 'hidden'}`}>
-      <div className='flex p-4 gap-24'>
-        <div className='flex flex-col gap-4 font-semibold'>
-          <h1 className='text-gray-500 text-lg'>Men</h1>
-          <a className='hover:underline underline-offset-4' href='#'>All</a>
-          {men?.map((item, index) => <a key={index} className='hover:underline underline-offset-4' href='#'>{item}</a>)}
+    <div className={`w-full left-0 absolute bg-white border-t-gray-400 top-10 
+      transition-all duration-500 ease-in-out delay-100 overflow-hidden 
+      ${open ? 'h-[14rem] border-b-2 border-black border' : 'h-[0px]'}`}
+    >
+      {items !== null &&
+        <div className={`flex p-4 gap-24 ${open ? 'block' : 'hidden'}`}>
+          <div className='flex flex-col gap-4 font-semibold'>
+            <h1 className='text-gray-500 text-lg'>Men</h1>
+            {items.men.map((item, index) => <Link key={index} className='hover:underline underline-offset-4' to={item.link}>{item.name}</Link>)}
+          </div>
+          <div className='flex flex-col gap-4 font-semibold'>
+            <h1 className='text-gray-500 text-lg'>Women</h1>
+            {items.women.map((item, index) => <Link key={index} className='hover:underline underline-offset-4' to={item.link}>{item.name}</Link>)}
+          </div>
         </div>
-        <div className='flex flex-col gap-4 font-semibold'>
-          <h1 className='text-gray-500 text-lg'>Women</h1>
-          <a className='hover:underline underline-offset-4' href='#'>All</a>
-          {women?.map((item, index) => <a key={index} className='hover:underline underline-offset-4' href='#'>{item}</a>)}
-        </div>
-      </div>
+      }
     </div>
   )
 }
