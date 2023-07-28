@@ -141,12 +141,12 @@ const Dropdown = ({ open, items }: DropdownProps) => {
       ${open ? 'h-[14rem] border-b-2 border-black border' : 'h-[0px]'}`}
     >
       {items !== null &&
-        <div className={`flex p-4 gap-24 ${open ? 'block' : 'hidden'}`}>
-          <div className='flex flex-col gap-4 font-semibold'>
+        <div className={`flex p-4 ${open ? 'block' : 'hidden'}`}>
+          <div className='flex flex-col basis-1/4 gap-4 font-semibold'>
             <h1 className='text-gray-500 text-lg'>Men</h1>
             {items.men.map((item, index) => <Link key={index} className='hover:underline underline-offset-4' to={item.link}>{item.name}</Link>)}
           </div>
-          <div className='flex flex-col gap-4 font-semibold'>
+          <div className='flex flex-col basis-1/4 gap-4 font-semibold'>
             <h1 className='text-gray-500 text-lg'>Women</h1>
             {items.women.map((item, index) => <Link key={index} className='hover:underline underline-offset-4' to={item.link}>{item.name}</Link>)}
           </div>
