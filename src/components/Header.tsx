@@ -86,7 +86,7 @@ const Header = () => {
   return (
     <header>
       <div className='max-w-screen-xl mx-auto flex justify-between items-center p-4'>
-        <Link to='#' className='hidden lg:block lg:font-bold'>ClothingShop</Link>
+        <Link to='/' className='hidden lg:block lg:font-bold'>ClothingShop</Link>
         <button className='block lg:hidden'>
           <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' className='w-8 h-8'>
             <path stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5' />

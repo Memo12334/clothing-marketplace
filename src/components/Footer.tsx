@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
-    <footer className='pt-12 pb-12 pl-4 pr-4 border-t border-gray-300'>
-      <div className='max-w-screen-xl mx-auto grid gap-20 lg:grid-cols-[200px_400px_400px] lg:gap-0'>
+    <footer className='border-t border-gray-300 p-8'>
+      <div className='max-w-screen-xl mx-auto grid gap-20 lg:grid-cols-[200px_400px_400px] lg:gap-0 p-4'>
         <div className='justify-self-center lg:justify-self-start'>
-          <a className='font-bold cursor-pointer' href='#'>ClothingShop</a>
+          <Link className='font-bold cursor-pointer' to='/'>ClothingShop</Link>
         </div>
         <div className='flex justify-evenly font-light text-gray-500'>
           <div className='flex flex-col gap-3'>
