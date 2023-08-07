@@ -1,16 +1,13 @@
 import Cards from '../../../components/Cards'
-import { CardProps } from '../../../shared/interfaces/card.interface'
+import { ItemProps } from '../../../shared/interfaces/item.interface'
 
-const products: CardProps[] = [
+const items: ItemProps[] = [
   {
-    title: 'Sports',
-    price: '$99',
-    image: '../../src/assets/images/sports.jpg'
-  },
-  {
-    title: 'Music',
-    price: '$99',
-    image: '../../src/assets/images/clothes.jpg'
+    id: 0,
+    name: 'Sports',
+    description: 'best sports product',
+    price: 99,
+    images: ['../../src/assets/images/sports.jpg']
   },
 ]
 
@@ -22,7 +19,7 @@ const Featured = () => {
           <h1 className='text-3xl text-center md:text-left lg:text-left'>Featured</h1>
           <a href='#' className='bg-slate-950 hover:bg-slate-800 font-normal text-white rounded-full px-4 py-2'>View All</a>
         </div>
-        <Cards cards={products} />
+        <Cards cards={items} />
       </div>
     </section>
   )

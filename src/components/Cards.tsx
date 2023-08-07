@@ -1,8 +1,8 @@
-import { CardProps } from '../shared/interfaces/card.interface'
+import { ItemProps } from '../shared/interfaces/item.interface'
 import Card from './Card'
 
 interface CardsProps {
-  cards: CardProps[]
+  cards: ItemProps[]
 }
 
 const Cards = ({ cards }: CardsProps) => {
@@ -11,9 +11,9 @@ const Cards = ({ cards }: CardsProps) => {
       {cards.map((card, index) => (
         <Card
           key={index}
-          title={card.title}
+          name={card.name}
           price={card.price}
-          image={card.image}
+          image={card.images[0]}
         />
       ))}
     </div>

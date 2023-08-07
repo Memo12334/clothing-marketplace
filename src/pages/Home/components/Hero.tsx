@@ -9,7 +9,7 @@ const Hero = () => {
         <Link to='#' className='bg-slate-950 text-white rounded px-3 py-2 hover:bg-gray-800'>
           Find Products
         </Link>
-        <Link to='#' className='border border-gray-400 rounded px-3 py-2 hover:border-gray-800'>
+        <Link to='create-store' className='border border-gray-400 rounded px-3 py-2 hover:border-gray-800'>
           Create Store
         </Link>
       </div>

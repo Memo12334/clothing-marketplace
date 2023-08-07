@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import '@animxyz/core'
 import { XyzTransitionGroup } from '@animxyz/react'
+import '@animxyz/core'
 
 import accessoires from '../../../assets/images/accessoires.jpg'
 import clothes from '../../../assets/images/clothes.jpg'
