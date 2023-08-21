@@ -27,7 +27,7 @@ const Sidebar = ({ handleChange, storeValues, selectedImages, preview, imageChan
   })
 
   const onSubmit = async (data: StoreProps) => {
-    await createStoreMutation.mutateAsync({
+    createStoreMutation.mutate({
       name: data.name,
       item: data.item,
     })
