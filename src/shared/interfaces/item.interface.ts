@@ -1,9 +1,12 @@
 
 export interface ItemProps {
-  id: number
   name: string
   description: string
   price: number
-  images: string[]
+  images: File[]
 }
 
+export interface StoreProps {
+  name: string
+  item: ItemProps
+}

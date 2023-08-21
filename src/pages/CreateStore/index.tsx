@@ -2,36 +2,48 @@ import { ChangeEvent, useState } from 'react'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Sidebar from './components/Sidebar'
-import { ItemProps } from '../../shared/interfaces/item.interface'
+import { StoreProps } from '../../shared/interfaces/item.interface'
 import useImageUploader from './hooks/useImageUploader'
 
 const CreateStore = () => {
-  const [storeName, setStoreName] = useState<string>('')
-  const [form, setForm] = useState<ItemProps>({
-    id: 0,
-    name: 'name',
-    description: 'description',
-    price: 0,
-    images: []
+  const [form, setForm] = useState<StoreProps>({
+    name: '',
+    item: {
+      name: '',
+      description: '',
+      price: 0,
+      images: []
+    }
   })
 
   const { selectedImages, preview, imageChange, removeImage } = useImageUploader()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({
-      ...form,
-      [e.target.id]: e.target.value
-    })
+    const { id, value } = e.target
+
+    if (id === 'storeName') {
+      setForm({
+        ...form,
+        name: value
+      });
+    } else {
+      setForm({
+        ...form,
+        item: {
+          ...form.item,
+          [id]: value
+        }
+      })
+    }
   }
 
   return (
-    <div className=''>
+    <>
       <Header />
       <div className='flex'>
         <Sidebar
-          setStoreName={setStoreName}
           handleChange={handleChange}
-          itemValues={form}
+          storeValues={form}
           selectedImages={selectedImages}
           preview={preview}
           imageChange={imageChange}
@@ -39,7 +51,7 @@ const CreateStore = () => {
         />
         <div className='flex-1'>
           <header className='shadow-lg p-2 font-bold text-center mb-20'>
-            {storeName}
+            {form.name}
           </header>
           <main>
             <div className='flex flex-col items-center'>
@@ -52,15 +64,15 @@ const CreateStore = () => {
                 ||
                 <img src='https://placehold.co/80' className='w-80 h-80 object-cover mb-10' />
               }
-              <span className='font-semibold text-2xl'>{form.name}</span>
-              <span className='font-light'>{form.description}</span>
-              <span className='font-bold'>${form.price}</span>
+              <span className='font-semibold text-2xl'>{form.item.name}</span>
+              <span className='font-light'>{form.item.description}</span>
+              <span className='font-bold'>${form.item.price}</span>
             </div>
           </main>
         </div>
       </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

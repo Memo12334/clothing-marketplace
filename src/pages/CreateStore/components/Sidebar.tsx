@@ -1,61 +1,100 @@
-import { ChangeEvent } from 'react'
-import { ItemProps } from '../../../shared/interfaces/item.interface'
+import { ChangeEvent, useEffect } from 'react'
+import { StoreProps } from '../../../shared/interfaces/item.interface'
+import { useMutation } from '@tanstack/react-query'
+import { createStore } from '../../../api/store'
+import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { storeSchema } from '../../../shared/schemas/schemas'
 
 interface Props {
-  setStoreName: React.Dispatch<React.SetStateAction<string>>
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-  itemValues: ItemProps
+  storeValues: StoreProps
   selectedImages: File[]
   preview: string[] | undefined
   imageChange: (e: ChangeEvent<HTMLInputElement>) => void
   removeImage: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void
 }
 
-const Sidebar = ({ setStoreName, handleChange, itemValues, selectedImages, preview, imageChange, removeImage }: Props) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // todo send data to backend
+const Sidebar = ({ handleChange, storeValues, selectedImages, preview, imageChange, removeImage }: Props) => {
+  const navigate = useNavigate()
+
+  const createStoreMutation = useMutation({
+    mutationFn: createStore,
+    onSuccess: (data) => {
+      navigate(`/store/${data.id}`)
+    }
+  })
+
+  const onSubmit = async (data: StoreProps) => {
+    await createStoreMutation.mutateAsync({
+      name: data.name,
+      item: data.item,
+    })
   }
+
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<StoreProps>({ resolver: zodResolver(storeSchema) })
+
+  useEffect(() => {
+    setValue('item.images', selectedImages)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedImages])
 
   return (
     <aside className='w-80 shadow-lg h-[50rem] p-4'>
-      <form className='w-full h-full' onSubmit={handleSubmit}>
-        <div className='flex flex-col'>
+      <form className='w-full h-full' onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+        <div className='flex flex-col mb-4'>
           <label htmlFor='storeName' className='font-semibold'>Store name</label>
-          <input id='storeName' type='text' onChange={(e) => setStoreName((e.target.value))}
-            className='px-2 mb-4 border border-black outline-none focus:outline-1 focus:outline-offset-0 focus:outline-black'
+          <input id='storeName' type='text' placeholder='Enter store name'
+            {...register('name', {
+              onChange: handleChange
+            })}
+            className='px-2 border border-black outline-none focus:outline-1 focus:outline-offset-0 focus:outline-black'
           />
+          {errors.name && <span className='text-red-500'>{errors.name.message}</span>}
         </div>
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col mb-4 '>
           <label htmlFor='name' className='font-semibold'>Item name</label>
-          <input id='name' type='text' onChange={handleChange} value={itemValues.name}
-            className='px-2 mb-4 border border-black outline-none focus:outline-1 focus:outline-offset-0 focus:outline-black'
+          <input id='name' type='text' value={storeValues.item.name} placeholder='Enter item name'
+            {...register('item.name', {
+              onChange: handleChange
+            })}
+            className='px-2 border border-black outline-none focus:outline-1 focus:outline-offset-0 focus:outline-black'
           />
+          {errors.item?.name && <span className='text-red-500'>{errors.item?.name.message}</span>}
         </div>
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col mb-4'>
           <label htmlFor='description' className='font-semibold'>Item description</label>
-          <textarea id='description' onChange={handleChange} value={itemValues.description}
-            className='resize-none px-2 mb-4 border border-black outline-none focus:outline-1 focus:outline-offset-0 focus:outline-black'
+          <textarea id='description' value={storeValues.item.description} placeholder='Enter item description'
+            {...register('item.description', {
+              onChange: handleChange
+            })}
+            className='resize-none px-2 border border-black outline-none focus:outline-1 focus:outline-offset-0 focus:outline-black'
           />
+          {errors.item?.description && <span className='text-red-500'>{errors.item?.description.message}</span>}
         </div>
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col mb-4'>
           <label htmlFor='price' className='font-semibold'>Price</label>
           <div className='relative'>
             <span className='ml-2 absolute text-gray-500'>$</span>
-            <input id='price' type='number' onChange={handleChange} value={itemValues.price}
-              className='w-full mb-4 border border-black outline-none px-5
-              focus:outline-1 focus:outline-offset-0 focus:outline-black 
+            <input id='price' type='number' value={storeValues.item.price}
+              {...register('item.price', {
+                onChange: handleChange, valueAsNumber: true
+              })}
+              className='w-full border border-black outline-none px-5
+              focus:outline-1 focus:outline-offset-0 focus:outline-black
               [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
             />
+            {errors.item?.price && <span className='text-red-500'>{errors.item?.price.message}</span>}
           </div>
         </div>
 
         <div className='flex flex-col mb-6'>
           <span className='font-semibold'>Image</span>
-          <div className='shadow h-20 flex items-center mb-4'>
+          <div className='shadow h-20 flex items-center'>
             {
               selectedImages.length > 0 &&
               <div className='flex'>
@@ -75,15 +114,22 @@ const Sidebar = ({ setStoreName, handleChange, itemValues, selectedImages, previ
               w-16 h-16 font-semibold cursor-pointer border border-gray-400 hover:scale-95'>
               <span className='text-2xl'>+</span>
             </label>
-            <input id='upload' type='file' accept='image/*' hidden multiple onChange={imageChange} />
+            <input id='upload' type='file' accept='image/*' hidden multiple
+              {...register('item.images', {
+                onChange: imageChange
+              })}
+            />
           </div>
+          {errors.item?.images && <span className='text-red-500'>{errors.item?.images.message}</span>}
         </div>
 
         <div className='w-full flex flex-col items-center gap-12'>
-          <button type='submit'
+          <button type='submit' disabled={createStoreMutation.isLoading}
             className='p-3 bg-slate-950 text-white font-semibold rounded-full hover:bg-gray-800'>
-            Create Store
+            {createStoreMutation.isLoading ? 'Creating...' : 'Create Store'}
           </button>
+
+          {createStoreMutation.isError && <span className='text-red-500'>An error occured</span>}
         </div>
       </form>
     </aside>

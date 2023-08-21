@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import Cards from '../../../components/Cards'
 import { ItemProps } from '../../../shared/interfaces/item.interface'
 
@@ -12,6 +13,18 @@ const items: ItemProps[] = [
 ]
 
 const Featured = () => {
+  // const { isLoading, isError, data, error } = useQuery(['stores'], async () => {
+  //   const res = await fetch('http://localhost:5000/store')
+  //   if (!res.ok) {
+  //     throw new Error('Network response was not ok')
+  //   }
+  //   return res.json()
+  // })
+
+  // if (isLoading) {
+  //   return <span>Loading...</span>
+  // }
+
   return (
     <section className='p-4 mb-16'>
       <div className='max-w-screen-xl mx-auto'>

@@ -30,28 +30,19 @@ const useImageUploader = () => {
     }
 
     if (e.target.files && e.target.files.length > 0) {
-      if (e.target.files.length > 4) {
-        alert('You can only upload 4 images')
-        return
-      }
+      const images = [...e.target.files]
+      setSelectedImages([...selectedImages, ...images])
     } else {
       setSelectedImages([])
       return
     }
-
-    const images = [...e.target.files]
-
-    if (selectedImages)
-      setSelectedImages([...selectedImages, ...images])
   }
 
   const removeImage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
     e.preventDefault()
-    if (selectedImages) {
-      const newImages = [...selectedImages]
-      newImages.splice(index, 1)
-      setSelectedImages(newImages)
-    }
+    const newImages = [...selectedImages]
+    newImages.splice(index, 1)
+    setSelectedImages(newImages)
   }
 
   return { selectedImages, preview, imageChange, removeImage };

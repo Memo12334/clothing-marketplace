@@ -1,42 +1,66 @@
 import { Router } from 'express'
 import { PrismaClient } from '@prisma/client'
+import path from 'path'
+import multer from 'multer'
+import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE, storeSchemaServer } from '../../shared/schemas/schemas'
 
 const router = Router()
 const prisma = new PrismaClient()
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './src/assets/storeImages')
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: MAX_FILE_SIZE
+  },
+  fileFilter: (req, file, cb) => {
+    if (ACCEPTED_IMAGE_TYPES.includes(file.mimetype)) {
+      cb(null, true)
+    } else {
+      cb(null, false)
+    }
+  }
+})
+
 // store crud
 
 // create store
-router.post('/', async (req, res) => {
+router.post('/', upload.array('item.images', 4), async (req, res) => {
   try {
     const { name, item } = req.body
+    const parseItem = JSON.parse(item)
 
-    // Create the Store first
+    storeSchemaServer.parse({ name, item: parseItem })
+
+    const files = req.files as Express.Multer.File[]
+    const fileNames: string[] = files.map((file) => file.filename)
+
     const createdStore = await prisma.store.create({
       data: {
-        name,
-      },
-    })
-
-    // Create the Item and associate it with the created Store
-    await prisma.item.create({
-      data: {
-        name: item.name,
-        description: item.description,
-        price: item.price,
-        images: item.images,
-        store: {
-          connect: {
-            id: createdStore.id,
+        name: name,
+        item: {
+          create: {
+            name: parseItem.name,
+            description: parseItem.description,
+            price: parseItem.price,
+            images: fileNames,
           },
-        },
+        }
       },
     })
 
     res.status(201).json(createdStore)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: 'Store name is already in use' })
+    res.status(500).json({ error: 'Failed to create store' })
   }
 })
 
@@ -70,7 +94,7 @@ router.put('/:id', async (req, res) => {
 // delete store
 router.delete('/:id', async (req, res) => {
   const { id } = req.params
-  await prisma.item.deleteMany({ where: { storeId: Number(id) } })
+  await prisma.item.delete({ where: { storeId: Number(id) } })
   await prisma.store.delete({ where: { id: Number(id) } })
   res.sendStatus(200)
 })
