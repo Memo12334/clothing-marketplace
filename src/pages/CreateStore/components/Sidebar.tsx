@@ -20,17 +20,16 @@ const Sidebar = ({ handleChange, storeValues, selectedImages, preview, imageChan
   const navigate = useNavigate()
 
   const createStoreMutation = useMutation({
-    mutationFn: createStore,
-    onSuccess: (data) => {
-      navigate(`/store/${data.id}`)
-    }
+    mutationFn: createStore
   })
 
-  const onSubmit = async (data: StoreProps) => {
+  const onSubmit = (data: StoreProps) => {
     createStoreMutation.mutate({
       name: data.name,
-      item: data.item,
-    })
+      item: data.item
+    },
+      { onSuccess: (data) => navigate(`/store/${data.id}`) },
+    )
   }
 
   const { register, handleSubmit, formState: { errors }, setValue } = useForm<StoreProps>({ resolver: zodResolver(storeSchema) })
