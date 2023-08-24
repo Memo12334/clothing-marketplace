@@ -11,8 +11,14 @@ app.use(cors({
 
 app.use('/store', storeRoutes)
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.use((error, req, res, next) => {
+  if (!error.statusCode) error.statusCode = 500
+
+  if (error.statusCode === 401) {
+    res.status(error.statusCode).send(error.message)
+  }
+
+  res.status(error.statusCode).send('Something broke!')
 })
 
 app.listen(5000, () => {

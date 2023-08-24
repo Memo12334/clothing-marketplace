@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import path from 'path'
 import multer from 'multer'
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE, storeSchemaServer } from '../../shared/schemas/schemas'
+import { BadRequestError } from './utils/errors'
 
 const router = Router()
 const prisma = new PrismaClient()
@@ -33,12 +34,18 @@ const upload = multer({
 // store crud
 
 // create store
-router.post('/', upload.array('item.images', 4), async (req, res) => {
+router.post('/', upload.array('item.images', 4), async (req, res, next) => {
   try {
     const { name, item } = req.body
     const parseItem = JSON.parse(item)
 
     storeSchemaServer.parse({ name, item: parseItem })
+
+    const storeExists = await prisma.store.findUnique({ where: { name } })
+    if (storeExists) throw new Error('Store already exists')
+
+    if (req.files === undefined || req.files.length as number === 0) throw new Error('No images were uploaded')
+    if (req.files.length as number > 4) throw new Error('You can only upload 4 images')
 
     const files = req.files as Express.Multer.File[]
     const fileNames: string[] = files.map((file) => file.filename)
@@ -59,8 +66,7 @@ router.post('/', upload.array('item.images', 4), async (req, res) => {
 
     res.status(201).json(createdStore)
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Failed to create store' })
+    next(new BadRequestError(error as Error))
   }
 })
 
@@ -73,9 +79,18 @@ router.get('/', async (req, res) => {
 
 // get one store
 router.get('/:id', async (req, res) => {
-  const { id } = req.params
-  const store = await prisma.store.findUnique({ where: { id: Number(id) } })
-  res.json(store)
+  try {
+    const { id } = req.params
+    const store = await prisma.store.findUnique({
+      where: {
+        id: Number(id)
+      },
+      include: { item: true }
+    })
+    res.json(store)
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get store' })
+  }
 })
 
 // update store name

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { StoreProps } from '../../../shared/interfaces/item.interface'
 import { useMutation } from '@tanstack/react-query'
 import { createStore } from '../../../api/store'
@@ -18,9 +18,10 @@ interface Props {
 
 const Sidebar = ({ handleChange, storeValues, selectedImages, preview, imageChange, removeImage }: Props) => {
   const navigate = useNavigate()
+  const [error, setError] = useState<string>()
 
   const createStoreMutation = useMutation({
-    mutationFn: createStore
+    mutationFn: createStore,
   })
 
   const onSubmit = (data: StoreProps) => {
@@ -28,7 +29,10 @@ const Sidebar = ({ handleChange, storeValues, selectedImages, preview, imageChan
       name: data.name,
       item: data.item
     },
-      { onSuccess: (data) => navigate(`/store/${data.id}`) },
+      {
+        onSuccess: (data) => navigate(`/store/${data.id}`),
+        onError: (error) => { if (error instanceof Error) setError(error.message) }
+      },
     )
   }
 
@@ -128,7 +132,7 @@ const Sidebar = ({ handleChange, storeValues, selectedImages, preview, imageChan
             {createStoreMutation.isLoading ? 'Creating...' : 'Create Store'}
           </button>
 
-          {createStoreMutation.isError && <span className='text-red-500'>An error occured</span>}
+          {error && <span className='text-red-500'>{error}</span>}
         </div>
       </form>
     </aside>
