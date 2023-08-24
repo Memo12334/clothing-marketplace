@@ -7,6 +7,13 @@ import axios from 'axios'
 
 axios.defaults.baseURL = 'http://localhost:5000'
 
+axios.interceptors.response.use((response) => {
+  return response
+}, (error) => {
+  if (error.response) throw new Error(error.response.data)
+  else throw new Error(error.message)
+})
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <BrowserRouter>
     <QueryClientProvider client={new QueryClient()}>
