@@ -1,14 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
 import Cards from '../../../components/Cards'
 import { ItemProps } from '../../../shared/interfaces/item.interface'
 
 const items: ItemProps[] = [
   {
-    id: 0,
     name: 'Sports',
     description: 'best sports product',
     price: 99,
-    images: ['../../src/assets/images/sports.jpg']
+    images: ['/images/sports.jpg']
   },
 ]
 

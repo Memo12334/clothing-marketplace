@@ -10,10 +10,10 @@ const prisma = new PrismaClient()
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './src/assets/storeImages')
+    cb(null, 'public/storeImages')
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname))
+    cb(null, Date.now() + '-' + Math.round(Math.random() * 1000) + path.extname(file.originalname))
   }
 })
 
@@ -78,18 +78,19 @@ router.get('/', async (req, res) => {
 })
 
 // get one store
-router.get('/:id', async (req, res) => {
+router.get('/:name', async (req, res, next) => {
   try {
-    const { id } = req.params
+    const name = req.params.name
     const store = await prisma.store.findUnique({
       where: {
-        id: Number(id)
+        name: name
       },
       include: { item: true }
     })
-    res.json(store)
+    if (!store) throw new Error('Store not found')
+    res.status(201).json(store)
   } catch (error) {
-    res.status(500).json({ error: 'Failed to get store' })
+    next(new BadRequestError(error as Error))
   }
 })
 

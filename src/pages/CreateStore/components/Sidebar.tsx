@@ -30,7 +30,7 @@ const Sidebar = ({ handleChange, storeValues, selectedImages, preview, imageChan
       item: data.item
     },
       {
-        onSuccess: (data) => navigate(`/store/${data.id}`),
+        onSuccess: (data) => navigate(`/store/${data.name}`),
         onError: (error) => { if (error instanceof Error) setError(error.message) }
       },
     )

@@ -2,55 +2,50 @@ import { useState } from 'react'
 import { XyzTransitionGroup } from '@animxyz/react'
 import '@animxyz/core'
 
-import accessoires from '../../../assets/images/accessoires.jpg'
-import clothes from '../../../assets/images/clothes.jpg'
-import designer from '../../../assets/images/designer.jpg'
-import shoes from '../../../assets/images/shoes.jpg'
-import sports from '../../../assets/images/sports.jpg'
+const images = [
+  {
+    id: 1,
+    src: '/images/accessoires.jpg',
+    alt: 'accessoires',
+    title: 'Accessoires',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur.',
+    bg: 'bg-slate-950',
+  },
+  {
+    id: 2,
+    src: '/images/clothes.jpg',
+    alt: 'clothes',
+    title: 'Clothes',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur.',
+    bg: 'bg-red-400',
+  },
+  {
+    id: 3,
+    src: '/images/designer.jpg',
+    alt: 'designer',
+    title: 'Designer',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur.',
+    bg: 'bg-orange-400',
+  },
+  {
+    id: 4,
+    src: '/images/shoes.jpg',
+    alt: 'shoes',
+    title: 'Shoes',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur.',
+    bg: 'bg-yellow-400',
+  },
+  {
+    id: 5,
+    src: '/images/sports.jpg',
+    alt: 'sports',
+    title: 'Sport',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur.',
+    bg: 'bg-green-400',
+  },
+]
 
 const Carousel = () => {
-  const images = [
-    {
-      id: 1,
-      src: accessoires,
-      alt: 'accessoires',
-      title: 'Accessoires',
-      subtitle: 'Lorem ipsum dolor sit amet consectetur.',
-      bg: 'bg-slate-950',
-    },
-    {
-      id: 2,
-      src: clothes,
-      alt: 'clothes',
-      title: 'Clothes',
-      subtitle: 'Lorem ipsum dolor sit amet consectetur.',
-      bg: 'bg-red-400',
-    },
-    {
-      id: 3,
-      src: designer,
-      alt: 'designer',
-      title: 'Designer',
-      subtitle: 'Lorem ipsum dolor sit amet consectetur.',
-      bg: 'bg-orange-400',
-    },
-    {
-      id: 4,
-      src: shoes,
-      alt: 'shoes',
-      title: 'Shoes',
-      subtitle: 'Lorem ipsum dolor sit amet consectetur.',
-      bg: 'bg-yellow-400',
-    },
-    {
-      id: 5,
-      src: sports,
-      alt: 'sports',
-      title: 'Sport',
-      subtitle: 'Lorem ipsum dolor sit amet consectetur.',
-      bg: 'bg-green-400',
-    },
-  ]
   const [current, setCurrent] = useState(images[0])
 
   const handleNext = () => {
