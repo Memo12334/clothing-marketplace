@@ -1,6 +1,16 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import storeRoutes from './routes/storeRoutes'
 import cors from 'cors'
+
+export class AppError extends Error {
+  statusCode: number
+  constructor(message: string, statusCode: number) {
+    super(message)
+
+    this.name = Error.name
+    this.statusCode = statusCode
+  }
+}
 
 const app = express()
 app.use(express.json())
@@ -11,7 +21,7 @@ app.use(cors({
 
 app.use('/store', storeRoutes)
 
-app.use((error, req, res, next) => {
+app.use((error: AppError, req: Request, res: Response, next: NextFunction) => {
   if (!error.statusCode) error.statusCode = 500
 
   if (error.statusCode === 400) {

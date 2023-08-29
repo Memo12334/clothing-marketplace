@@ -6,6 +6,10 @@ export interface ItemProps {
   images: File[] | string[]
 }
 
+export interface CartProps {
+  [itemId: string]: ItemProps
+}
+
 export interface StoreProps {
   name: string
   item: ItemProps

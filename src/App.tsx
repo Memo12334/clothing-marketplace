@@ -5,29 +5,20 @@ import Store from './pages/Store'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { AxiosError } from 'axios'
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
     onError: (error) => {
-      if (error instanceof Error) {
-        if (error.message === 'Network Error') {
-          toast.error('Network error, please try again later')
-        }
-        else {
-          toast.error(error.message)
-        }
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data)
       }
     }
   }),
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error instanceof Error) {
-        if (error.message === 'Network Error') {
-          toast.error('Network error, please try again later')
-        }
-        else {
-          toast.error(error.message)
-        }
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data)
       }
     }
   })
