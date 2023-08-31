@@ -6,6 +6,7 @@ import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@ta
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { AxiosError } from 'axios'
+import { ShoppingCartProvider } from './context/ShoppingCartContext'
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
@@ -27,12 +28,14 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/create-store' element={<CreateStore />} />
-        <Route path='/store/:name' element={<Store />} />
-        <Route path='*' element={<h1>Not found</h1>} />
-      </Routes>
+      <ShoppingCartProvider>
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/create-store' element={<CreateStore />} />
+          <Route path='/store/:name' element={<Store />} />
+          <Route path='*' element={<h1>Not found</h1>} />
+        </Routes>
+      </ShoppingCartProvider>
       <ToastContainer />
     </QueryClientProvider>
   )

@@ -5,10 +5,12 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { StoreProps } from '../../shared/interfaces/item.interface'
 import { useState } from 'react'
+import { ShoppingCartContext, useShoppingCart } from '../../context/ShoppingCartContext'
 
 const Store = () => {
   const { name } = useParams() as { name: string }
   const [currentImage, setCurrentImage] = useState<string>()
+  const { increaseCartQuantity }: ShoppingCartContext = useShoppingCart()
 
   const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
     const target = e.target as HTMLOrSVGImageElement
@@ -62,7 +64,7 @@ const Store = () => {
             <span className='mb-4'>Name: <span className='font-bold'>{data.item.name}</span></span>
             <span className='mb-4'>Description: <span className='font-bold'>{data.item.description}</span></span>
 
-            <button onClick={() => console.log('ewa')} className='bg-slate-950 hover:bg-slate-800 font-normal text-white rounded-full px-4 py-2 w-56'>
+            <button onClick={() => increaseCartQuantity?.(data)} className='bg-slate-950 hover:bg-slate-800 font-normal text-white rounded-full px-4 py-2 w-56'>
               Add to cart
             </button>
           </div>

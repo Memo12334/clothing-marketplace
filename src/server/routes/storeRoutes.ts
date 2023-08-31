@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client'
 import path from 'path'
 import multer from 'multer'
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE, storeSchemaServer } from '../../shared/schemas/schemas'
-import { BadRequestError } from './utils/errors'
 import { AppError } from '..'
 
 const router = Router()

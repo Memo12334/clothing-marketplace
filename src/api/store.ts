@@ -15,8 +15,8 @@ export const createStore = ({ name, item }: StoreProps) => {
     .then((res) => res.data)
 }
 
-export const getStore = (id: string) => {
+export const getStore = (name: string) => {
   return axios
-    .get(`/store/${id}`)
+    .get(`/store/${name}`)
     .then((res) => res.data)
 }
